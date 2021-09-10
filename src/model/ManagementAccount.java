@@ -1,98 +1,70 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+
 
 public class ManagementAccount{
  
 	public Account account;
 	public ArrayList <Account> Accounts;
-	
-    private int consignarCorriente;
-    private boolean cuenta;
-	private int consignarAhorros;
-	
-	EtypeAccount actual = EtypeAccount.CURRENT;
-	EtypeAccount deposito = EtypeAccount.DEPOSIT;
+	public ArrayList <CheckBook> checkBooks;
 	
 	public ManagementAccount() {
 		super();
 		Accounts = new ArrayList <>();
 	}
 
-	/**
-	 * @return the consignarCorriente
-	 */
-	public int getConsignarCorriente() {
-		return consignarCorriente;
-	}
-
-	/**
-	 * @param consignarCorriente the consignarCorriente to set
-	 */
-	public void setConsignarCorriente(int consignarCorriente) {
-		this.consignarCorriente = consignarCorriente;
-	}
-
-	/**
-	 * @return the cuentaR0739
-	 */
-	public boolean isCuenta() {
-		return cuenta;
-	}
-
-	/**
-	 * @param cuentaR0739 the cuentaR0739 to set
-	 */
-	public void setCuenta(boolean cuenta) {
-		this.cuenta = cuenta;
-	}
-
-	/**
-	 * @return the consignarAhorros
-	 */
-	public int getConsignarAhorros() {
-		return consignarAhorros;
-	}
-
-	/**
-	 * @param consignarAhorros the consignarAhorros to set
-	 */
-	public void setConsignarAhorros(int consignarAhorros) {
-		this.consignarAhorros = consignarAhorros;
-	}
-
 	public double deposity (String number, double residue) {
-		
-		if (account  )
-		
-		return 0;
+		Account bus = findAccount(number);
+		bus.deposti(residue);
+		return bus.getResidue();
 	}
-	
+//	retirar plata
 	public boolean retirement(String number, double residue) {
+		Account bus = findAccount(number);
+		boolean p = bus.retirement(residue);
+		if (p) {
+			return true;
+		}
 		return false;
 	}
-	
+//	
 	public Account findAccount(String number) {
-		return null;
+		for (Account accs : Accounts) {
+            if ( accs.getNumber().equals( number ) ) {
+                return accs;
+            }
+        }
+        return null;
 	}
 	
-	
-	public boolean addAccount (EtypeAccount etypeAccount ,String number) {
+//	Añadir cuenta nueva
+	public boolean addAccount (EtypeAccount etypeAccount ,String data[]) {
 		int cont = 0;
+		double residue = Double.parseDouble(data[1]);
+		String number = data[0];
+		Account k = null;
 		
-		ArrayList <Account> cuenta = Accounts;
-		
-		for (Account a : cuenta) {
-			if (a.getNumber().equals(ManagementAccount.this))cont ++;
+		if(etypeAccount.equals(EtypeAccount.CURRENT)) {
+			k = new CurrentAccount(number, residue, LocalDate.now(), 2000);
+		}else {
+			k = new DepositAccount(number, residue, LocalDate.now(), 10000);
 		}
-		
-		if (cont == 1) {
-			account.add(new Account(number, residue, localDate));
+//		Añadir cuenta si esta  no existe 
+		if(Accounts.isEmpty()) {
+			Accounts.add(k);
+			System.out.println("AÑADIDO");
+		    return true;
+		}else 
+//			Si la cuenta ya existe no la añade 
+		if (findAccount(number) == null) {
+			Accounts.add(k);
+			System.out.println("AÑADIDO");
 		    return true;
 		}else {
 			return false;
 		}
-
 	}
 	
 	public ArrayList<Account> getAcounts(){

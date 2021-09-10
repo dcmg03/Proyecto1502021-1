@@ -9,6 +9,10 @@ import java.util.Calendar;
     protected double residue;
     protected LocalDate dateCreation;
     
+    public Account() {
+    	
+    }
+    
     public Account(String number, double residue, LocalDate dateCreation){
     this.number=number;
     this.residue=residue;
@@ -26,4 +30,12 @@ import java.util.Calendar;
     public double getResidue() {
         return residue;
     }
+
+	/**
+	 * @param residue the residue to set
+	 */
+	public void setResidue(double residue) {
+		this.residue = residue;
+	}
+    
 }
